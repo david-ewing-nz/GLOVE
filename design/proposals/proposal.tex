@@ -1,0 +1,101 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+\geometry{margin=1in}
+\setmainfont{TeX Gyre Termes}
+
+\title{\textbf{Project Proposal: In-House Development of a High-Resolution Piezoresistive Tactile Sensing Glove}}
+\author{Industrial Origami R\&D Team}
+\date{October 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Commercial high-end tactile pressure-sensing systems (such as the PPS TactileGlove II) exceed typical budgetary constraints for unfunded or bootstrapping research groups, often requiring custom corporate quotes in the mid-to-high five-figure range. This proposal outlines an agile, in-house engineering initiative to design, manufacture, and calibrate a custom 65-element wireless tactile sensing glove. By leveraging internal competencies in 3D printing, composite materials, textile sewing, analog electronics, and machine learning, our team can deliver a functional prototype for under \$150 in raw material costs while matching the spatial topology and core specifications of commercial alternatives.
+\end{abstract}
+
+\section{Introduction and Project Motivation}
+Quantifying hand force distribution, grip ergonomics, and micro-interactions is vital for industrial AI, human factors research, and advanced robotics. Commercial benchmarking indicates systems like the Pressure Profile Systems TactileGlove II feature 65 discrete sensing nodes per glove, a 100 Hz scan rate, and wireless Bluetooth 5 telemetry. 
+
+With an unfunded development model, our objective is to bridge the cost barrier by deploying rapid in-house manufacturing. The system will combine a flexible multi-layer fabric and composite glove matrix with an ESP32-S3 microcontroller, multiplexed analog front-ends, and a machine learning regression pipeline to compensate for piezoresistive material drift and hysteresis.
+
+\section{Technical Specifications & Target Metrics}
+To validate our prototype against industry standards, our design targets closely mirror established baseline performance metrics for hand-pressure mapping:
+\begin{itemize}
+    \item \textbf{Sensing Nodes:} 65 active intersection points distributed across the palm, thumb, and fingertips.
+    \item \textbf{Spatial Resolution Matrix:} Dual-layer row/column conductive fabric traces interlaced with piezoresistive film.
+    \item \textbf{Scan Rate Target:} $\ge 50\text{ Hz}$ (single glove operation).
+    \item \textbf{Connectivity:} Wireless Bluetooth Low Energy (BLE 5) via ESP32-S3.
+    \item \textbf{Power Supply:} Rechargeable 3.7V 500mAh LiPo battery with onboard regulation.
+\end{itemize}
+
+\section{System Architecture & Subsystem Division}
+
+\subsection{Mechanical, Composite, and Textile Subsystem}
+Fabricating a wearable sensor that does not impede natural hand mobility requires specialised composite and textile integration:
+\begin{itemize}
+    \item \textbf{Substrate Glove:} Form-fitting athletic base gloves serving as the primary mechanical anchor.
+    \item \textbf{Conductive Traces:} Sewing parallel row and column electrodes using silver-coated conductive thread.
+    \item \textbf{Sensing Interlayer:} A precision-laser-cut or hand-punched sheet of piezoresistive material (such as Velostat or Eeonyx) sandwiched between the conductive electrode layers.
+    \item \textbf{Enclosures:} 3D-printed low-profile TPU/Nylon housings mounted on the dorsal wrist to secure the microcontroller board and multiplexer ICs securely without restricting tendon movement.
+\end{itemize}
+
+\subsection{Electronics and Analog Front-End (AFE)}
+Unlike commercial capacitive mats that require complex charge-transfer circuitry, our design utilises a piezoresistive resistance-to-voltage architecture:
+\begin{itemize}
+    \item \textbf{Multiplexing:} Cascaded analog multiplexers (e.g., CD4051BE / CD4067 ICs) managed by the microcontroller to sequentially scan the $R \\times C$ matrix intersections.
+    \item \textbf{Analog-to-Digital Conversion:} High-speed internal 12-bit ADCs on the ESP32-S3 paired with operational amplifier buffers to maintain signal integrity across long flexible traces.
+\end{itemize}
+
+\subsection{Machine Learning & Calibration Pipeline}
+Piezoresistive films are notoriously susceptible to non-linearity, material creep, and hysteresis under repetitive dynamic loading. We will implement:
+\begin{itemize}
+    \item \textbf{On-Device Filtering:} Rolling-window digital filters to suppress high-frequency noise and electromagnetic interference.
+    \item \textbf{ML Regression Calibration:} A lightweight multi-layer perceptron (MLP) or ridge regression model trained in Python and compiled via TensorFlow Lite for microcontrollers. This model maps raw multi-channel voltage values to calibrated force units (Newtons), correcting for mechanical hysteresis in real time.
+\end{itemize}
+
+\section{Bill of Materials (BOM) and Expense Estimates}
+The following budget outlines estimated out-of-pocket costs for a single functional prototype glove:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lllr}
+\toprule
+\textbf{Category} & \textbf{Component / Material Description} & \textbf{Purpose} & \textbf{Cost (NZD)} \\
+\midrule
+Electronics & ESP32-S3 Development Board & BLE 5 wireless telemetry & \$20.00 \\
+Analog Interface & CD4051 / CD4067 Multiplexer ICs & Matrix row/column routing & \$8.00 \\
+Sensing Material & Velostat / Eeonyx Piezoresistive Film & Pressure-variable resistance layer & \$30.00 \\
+Textiles & Conductive Silver Thread \& Stretch Fabric & Internal electrode grid stitching & \$25.00 \\
+Power & 3.7V 500mAh LiPo + Charging Module & Portable power management & \$12.00 \\
+3D Printing & TPU / Nylon Filament & Rigid wrist-housing enclosures & \$8.00 \\
+\midrule
+\textbf{Total} & & & \textbf{\$103.00} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Project Timeline and Milestones}
+\begin{enumerate}
+    \item \textbf{Phase 1 (Weeks 1--2):} Single-node breadboard testing, baseline analog voltage divider validation, and baseline ML data collection script writing.
+    \item \textbf{Phase 2 (Weeks 3--4):} Composite sewing trials, stitch spacing optimisation, and multi-layer matrix fabrication on test swatches.
+    \item \textbf{Phase 3 (Weeks 5--6):} PCB/wiring integration with the ESP32-S3 multiplexer circuit and enclosure 3D printing.
+    \item \textbf{Phase 4 (Weeks 7--8):} End-to-end system assembly, calibration rig data collection, model training, and performance benchmarking against human grip tasks.
+\end{enumerate}
+
+\section{Relevant Academic Literature and Precedents}
+For further technical grounding in multimodal data fusion and manufacturing workflows, the team should review the following foundational works:
+\begin{itemize}
+    \item \textit{Computer vision and tactile glove: A multimodal model in lifting task risk assessment} --- IEEE Applied Ergonomics (September 2025).
+    \item \textit{Data-Driven Ergonomic Risk Assessment of Complex Hand-intensive Manufacturing Processes} --- IEEE Communications Engineering (March 2025).
+    \item \textit{Investigating Gripping Force During Lifting Tasks Using a Pressure Sensing Glove System} --- Science Direct Applied Ergonomics (February 2023).
+\end{itemize}
+
+\end{document}
